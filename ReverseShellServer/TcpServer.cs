@@ -12,87 +12,141 @@ namespace ReverseShellServer
 
     class TcpServer
     {
-        public TcpListener tcpListener { get; set; }
-        public IPAddress ip { get; set; }
-        public int port { get; set; }
+        public TcpListener TcpListener { get; set; }
+        public IPAddress Ip { get; set; }
+        public int Port { get; set; }
 
-        public event EventHandler ClientConnectedEvent;
-        public event EventHandler DataRecievedEvent;
+        public event EventHandler<ClientConnectedArgs> ClientConnectedEvent;
+        public event EventHandler ClientDisconnectedEvent;
+        public event EventHandler<DataRecievedArgs> DataRecievedEvent;
+
+        public Dictionary<string, TcpClient> ClientMap = new Dictionary<string, TcpClient>();
 
         public TcpServer(IPAddress _ip, int _port)
         {
-            ip = _ip;
-            port = _port;
+            Ip = _ip;
+            Port = _port;
 
-            tcpListener = new TcpListener(ip, this.port);
+            TcpListener = new TcpListener(Ip, this.Port);
         }
 
         public TcpServer(int _port)
         {
-            ip = IPAddress.Any;
-            port = _port;
+            Ip = IPAddress.Any;
+            Port = _port;
 
-            tcpListener = new TcpListener(IPAddress.Any, port);
+            TcpListener = new TcpListener(IPAddress.Any, Port);
         }
 
         public async void StartListening(CancellationToken cancellationToken)
         {
-            tcpListener.Start();
+            TcpListener.Start();
 
             cancellationToken.Register(() => {
-                tcpListener.Stop();
+                TcpListener.Stop();
                 Console.WriteLine("Stop Listener");
             });
 
+            // Handle client connections and disconnections
+            ClientConnectedEvent += (object sender, ClientConnectedArgs e) =>
+            {
+                ClientMap.Add(e.Client.Client.RemoteEndPoint.ToString(), e.Client);
+                Console.WriteLine("Client connected.");
+            };
+
+            ClientDisconnectedEvent += (object sender, EventArgs e) =>
+            {
+                TcpClient client = sender as TcpClient;
+                ClientMap.Remove(client.Client.RemoteEndPoint.ToString());
+                Console.WriteLine("Client disconnected.");
+
+            };
 
             while (!cancellationToken.IsCancellationRequested)
             {
-                TcpClient client = await tcpListener.AcceptTcpClientAsync();
-                Console.WriteLine("Connection accepted.");
+                TcpClient client = await TcpListener.AcceptTcpClientAsync();
 
-                var childSocketThread = new Thread(() =>
+                var childSocketThread = Task.Run(() =>
                 {
                     HandleClient(client, cancellationToken);
                 });
-                childSocketThread.Start();
+
+                ClientConnectedArgs connectionArgs = new ClientConnectedArgs
+                {
+                    Client = client,
+                    Task = childSocketThread
+                };
+                ClientConnectedEvent(client, connectionArgs);
+                // childSocketThread.Start();
             }
         }
 
 
-        private async static void HandleClient(TcpClient client, CancellationToken cancellationToken)
+        private async void HandleClient(TcpClient client, CancellationToken cancellationToken)
         {
+
             while (client.Connected && !cancellationToken.IsCancellationRequested)
             {
-                Console.Write(client.Connected + " " + port);
+                //Console.Write(client.Connected + " " + Port);
                 Console.WriteLine(!cancellationToken.IsCancellationRequested);
 
                 //---get the incoming data through a network stream---
                 NetworkStream nwStream = client.GetStream();
+
                 byte[] buffer = new byte[client.ReceiveBufferSize];
 
-                //---read incoming stream---
-                int bytesRead = await nwStream.ReadAsync(buffer, 0, client.ReceiveBufferSize);
-                Console.WriteLine($"Bytes recieved: {bytesRead}");
-                if (bytesRead == 0)
+                try
                 {
-                    Thread.Sleep(1000);
-                    break;
+                    //---read incoming stream---
+                    int bytesRead = await nwStream.ReadAsync(buffer, 0, client.ReceiveBufferSize);
+                    Console.WriteLine($"Bytes recieved: {bytesRead}");
+                    if (bytesRead == 0)
+                    {
+                        Thread.Sleep(1000);
+                        break;
+                    }
+                    //---convert the data received into a string---
+                    string dataReceived = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+                    Console.WriteLine($"{client.Client.RemoteEndPoint.ToString()} Received : {dataReceived}");
+
+                    DataRecievedArgs dataArgs = new DataRecievedArgs();
+                    dataArgs.Data = dataReceived;
+                    DataRecievedEvent(client, dataArgs);
                 }
-                //---convert the data received into a string---
-                string dataReceived = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-                Console.WriteLine($"{client.Client.RemoteEndPoint.ToString()} Received : {dataReceived}");
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
+
+            Console.WriteLine("Client disconnected");
+            ClientDisconnectedEvent(client, new EventArgs());
+        }
+
+
+        public void SendData(TcpClient client, string data)
+        {
+
+            int byteCount = Encoding.ASCII.GetByteCount(data);
+            byte[] sendData = Encoding.ASCII.GetBytes(data);
+
+            Console.WriteLine($"Send {byteCount}B of data: {data} to {client.Client.RemoteEndPoint.ToString()}");
+            NetworkStream stream = client.GetStream();
+            stream.Write(sendData, 0, sendData.Length);
+
+            //stream.Close();
         }
     }
 
-    class ClientConnectedArgs : EventArgs    // guideline: derive from EventArgs
+    public class ClientConnectedArgs : EventArgs    // guideline: derive from EventArgs
     {
-        public string Client { get; set; }
+        public TcpClient Client { get; set; }
+        public Task Task { get; set; }
     }
 
     class DataRecievedArgs : EventArgs    // guideline: derive from EventArgs
     {
-        public string Client { get; set; }
+        public string Data { get; set; }
     }
 
 }

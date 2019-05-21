@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,8 @@ namespace ReverseShellServer
     /// <summary>
     /// Interaction logic for ClientTab.xaml
     /// </summary>
+    [Designer("System.Windows.Forms.Design.LabelDesigner")]
+    [ToolboxItem("System.Windows.Forms.Design.AutoSizeToolboxItem")]
     public partial class ClientTab : UserControl
     {
         public ClientTab()

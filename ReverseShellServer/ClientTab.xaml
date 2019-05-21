@@ -5,8 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ReverseShellServer"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+             d:DesignHeight="34.989" d:DesignWidth="299.46">
+    <Grid Margin="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="6*"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Label x:Name="ClientName" Margin="0,0,0,0.2" Width="224" HorizontalAlignment="Center" Height="35" FontSize="10">User</Label>
+        <Button Content="X" Grid.Column="2" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Width="37" Height="15" Padding="0" FontSize="10"/>
     </Grid>
 </UserControl>

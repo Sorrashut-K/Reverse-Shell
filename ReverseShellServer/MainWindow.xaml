@@ -5,26 +5,36 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ReverseShellServer"
         mc:Ignorable="d"
-        Title="TCP Server Console" Height="450" Width="600">
+        Title="TCP Server Console" Height="550.8" Width="970.4">
     <Grid ShowGridLines="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="20*"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="30"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <TextBlock HorizontalAlignment="Left" Height="342" Margin="10,10,0,0" VerticalAlignment="Top" Width="425" Background="#FF2E2E2E" Foreground="#FFF3F3F3" FontFamily="Fira Code" Padding="5,10,5,6" Text="&gt; Awaiting Connection ...">
-        </TextBlock>
-        <StackPanel Grid.Column="1" HorizontalAlignment="Left" Height="342" Margin="0.2,10,0,0" VerticalAlignment="Top" Width="139" Background="White">
-            <Label Content="Connected Clients: 0"/>
-            <Separator Height="5" Margin="0,0,0.2,0"/>
+        <TextBlock x:Name="OutputConsole" Margin="10,10,10.4,10" Background="#FF2E2E2E" Foreground="#FFF3F3F3" FontFamily="Fira Code" Padding="5,10,5,6" Text="&gt; Awaiting Connection ..." ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.CanContentScroll="True"/>
+        <StackPanel Margin="10,10,9.8,10" Background="White" ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.ColumnSpan="2" Grid.Column="1">
+            <Label x:Name="ClientNumLabel" Content="Connected Clients: 0"/>
+            <Separator Height="4" Margin="0,0,0.2,0"/>
+            <ListView x:Name="ClientList" Height="312" Margin="0,0,0.2,0" RenderTransformOrigin="0.5,0.5">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding}" />
+                            <Button Content="Select"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </StackPanel>
-        <TextBox HorizontalAlignment="Left" Margin="10,0.4,0,0" Grid.Row="1" TextWrapping="Wrap" Text="&gt;" VerticalAlignment="Top" Width="574" Height="30" Background="#FF969696" Padding="5,0" FontFamily="Fira Code" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="InputConsole" Margin="10,0,10.4,0" TextWrapping="Wrap" Text="&gt;" Background="#FF969696" Padding="5,0" FontFamily="Fira Code" Grid.RowSpan="3" Height="31" VerticalAlignment="Top" Grid.Row="1"/>
         <Label Content="Log:" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="2" VerticalAlignment="Center" FontSize="8" Padding="0" VerticalContentAlignment="Bottom" Width="430" Height="11"/>
         <Label Content="Status:" Grid.Column="1" HorizontalAlignment="Left" Margin="0.2,2.4,0,0" Grid.Row="2" VerticalAlignment="Center" Width="139" FontSize="8" Padding="0"/>
+        <Button Content="Send" Grid.Column="1" HorizontalAlignment="Center" Margin="0" Grid.Row="1" VerticalAlignment="Center" Width="75" Click="SendMessage"/>
 
     </Grid>
 </Window>
