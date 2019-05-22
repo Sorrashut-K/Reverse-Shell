@@ -16,7 +16,7 @@
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <TextBlock x:Name="OutputConsole" Margin="10,10,10.4,10" Background="#FF2E2E2E" Foreground="#FFF3F3F3" FontFamily="Fira Code" Padding="5,10,5,6" Text="&gt; Awaiting Connection ..." ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.CanContentScroll="True"/>
+        <TextBlock x:Name="OutputConsole" Margin="10,10,10.2,5" Background="#FF2E2E2E" Foreground="#FFF3F3F3" FontFamily="Fira Code" Padding="5,10,5,6" Text="&gt; Awaiting Connection ..." ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.CanContentScroll="True"/>
         <StackPanel Margin="10,10,9.8,10" Background="White" ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.ColumnSpan="2" Grid.Column="1">
             <Label x:Name="ClientNumLabel" Content="Connected Clients: 0"/>
             <Separator Height="4" Margin="0,0,0.2,0"/>
@@ -24,17 +24,20 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding}" />
-                            <Button Content="Select"/>
+                            <TextBlock Text="{Binding}" PreviewMouseLeftButtonDown="SelectClient" />
                         </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
         </StackPanel>
-        <TextBox x:Name="InputConsole" Margin="10,0,10.4,0" TextWrapping="Wrap" Text="&gt;" Background="#FF969696" Padding="5,0" FontFamily="Fira Code" Grid.RowSpan="3" Height="31" VerticalAlignment="Top" Grid.Row="1"/>
+
+        <DockPanel Grid.RowSpan="3" Background="#FF313131" Margin="10,467,10,22.8">
+            <Label Width="18" Content="$" Foreground="White" Margin="0,0,0,0.2" VerticalContentAlignment="Center" />
+            <TextBox x:Name="InputConsole" Margin="0" TextWrapping="Wrap" Text="&gt;" Background="{x:Null}" Padding="5,0" FontFamily="Fira Code" Height="31" Foreground="White" VerticalContentAlignment="Center" />
+        </DockPanel>
         <Label Content="Log:" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="2" VerticalAlignment="Center" FontSize="8" Padding="0" VerticalContentAlignment="Bottom" Width="430" Height="11"/>
         <Label Content="Status:" Grid.Column="1" HorizontalAlignment="Left" Margin="0.2,2.4,0,0" Grid.Row="2" VerticalAlignment="Center" Width="139" FontSize="8" Padding="0"/>
-        <Button Content="Send" Grid.Column="1" HorizontalAlignment="Center" Margin="0" Grid.Row="1" VerticalAlignment="Center" Width="75" Click="SendMessage"/>
+        <Button Content="Send" Grid.Column="1" HorizontalAlignment="Left" Margin="0" Grid.Row="1" VerticalAlignment="Center" Width="75" Click="SendMessage"/>
 
     </Grid>
 </Window>

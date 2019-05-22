@@ -108,5 +108,25 @@ namespace ReverseShellServer
 
         }
 
+        private void SelectClient(object sender, MouseButtonEventArgs e)
+        {
+            TextBlock clientBlock = sender as TextBlock;
+            string endpoint = clientBlock.Text;
+
+            Console.WriteLine($"Clicked on {endpoint}, active: {activeEndpoint}");
+
+            if (endpoint != activeEndpoint)
+            {
+                TcpClient client = tcpServer.ClientMap[endpoint];
+                activeEndpoint = endpoint;
+                streamReader = new StreamReader(client.GetStream());
+                streamWriter = new StreamWriter(client.GetStream());
+                Console.WriteLine($"Switched to client on {endpoint}");
+
+                OutputConsole.ContentEnd.InsertLineBreak();
+                OutputConsole.Inlines.Add($"Switched to client on {endpoint}");
+            }
+            
+        }
     }
 }
