@@ -103,6 +103,8 @@ namespace ReverseShellServer
             {
                 streamWriter.WriteLine(message);
                 streamWriter.Flush();
+                OutputConsole.ContentEnd.InsertLineBreak();
+                OutputConsole.Inlines.Add($"$ {message}");
             }
             InputConsole.Clear();
 
@@ -121,12 +123,26 @@ namespace ReverseShellServer
                 activeEndpoint = endpoint;
                 streamReader = new StreamReader(client.GetStream());
                 streamWriter = new StreamWriter(client.GetStream());
-                Console.WriteLine($"Switched to client on {endpoint}");
+                Console.WriteLine($"Switched to client {endpoint}");
 
                 OutputConsole.ContentEnd.InsertLineBreak();
-                OutputConsole.Inlines.Add($"Switched to client on {endpoint}");
+                OutputConsole.Inlines.Add($"\nSwitched to client {endpoint}");
             }
             
+        }
+
+        private void InputConsole_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                SendMessage(sender, e);
+                InputConsole.Focus();
+            }
+        }
+
+        private void InputConsole_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }

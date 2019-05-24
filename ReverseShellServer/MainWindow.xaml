@@ -5,12 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ReverseShellServer"
         mc:Ignorable="d"
-        Title="TCP Server Console" Height="550.8" Width="970.4">
+        Title="TCP Server Console" Height="555.6" Width="1013.2" Background="White">
     <Grid ShowGridLines="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="20*"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
@@ -24,20 +23,18 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding}" PreviewMouseLeftButtonDown="SelectClient" />
+                            <TextBlock Text="{Binding}" PreviewMouseLeftButtonDown="SelectClient"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
         </StackPanel>
 
-        <DockPanel Grid.RowSpan="3" Background="#FF313131" Margin="10,467,10,22.8">
-            <Label Width="18" Content="$" Foreground="White" Margin="0,0,0,0.2" VerticalContentAlignment="Center" />
-            <TextBox x:Name="InputConsole" Margin="0" TextWrapping="Wrap" Text="&gt;" Background="{x:Null}" Padding="5,0" FontFamily="Fira Code" Height="31" Foreground="White" VerticalContentAlignment="Center" />
+        <DockPanel Grid.RowSpan="2" Background="#FF313131" Margin="10,0,10,0" Grid.Row="1" Height="36" VerticalAlignment="Top">
+            <Label Width="18" Content="$" Foreground="White" Margin="0" VerticalContentAlignment="Center" Height="30" />
+            <TextBox x:Name="InputConsole" Margin="0,0,5,0" TextWrapping="Wrap" Background="{x:Null}" Padding="5,0" FontFamily="Fira Code" Height="30" Foreground="White" VerticalContentAlignment="Center" KeyDown="InputConsole_KeyDown" TextChanged="InputConsole_TextChanged" BorderBrush="#FF797979" SelectionBrush="White" CaretBrush="White" />
         </DockPanel>
-        <Label Content="Log:" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="2" VerticalAlignment="Center" FontSize="8" Padding="0" VerticalContentAlignment="Bottom" Width="430" Height="11"/>
-        <Label Content="Status:" Grid.Column="1" HorizontalAlignment="Left" Margin="0.2,2.4,0,0" Grid.Row="2" VerticalAlignment="Center" Width="139" FontSize="8" Padding="0"/>
-        <Button Content="Send" Grid.Column="1" HorizontalAlignment="Left" Margin="0" Grid.Row="1" VerticalAlignment="Center" Width="75" Click="SendMessage"/>
+        <Button x:Name="SendButton" Content="Send" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" Width="101" Click="SendMessage" Grid.Column="1" VerticalAlignment="Center"/>
 
     </Grid>
 </Window>
