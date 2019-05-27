@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ReverseShellServer"
         mc:Ignorable="d"
         Title="TCP Server Console" Height="555.6" Width="1013.2" Background="White">
-    <Grid ShowGridLines="True">
+    <Grid x:Name="grid" ShowGridLines="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="20*"/>
             <RowDefinition Height="40"/>
@@ -15,7 +15,11 @@
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <TextBlock x:Name="OutputConsole" Margin="10,10,10.2,5" Background="#FF2E2E2E" Foreground="#FFF3F3F3" FontFamily="Fira Code" Padding="5,10,5,6" Text="&gt; Awaiting Connection ..." ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.CanContentScroll="True"/>
+
+        <ScrollViewer Margin="10,10,10.2,5" >
+            <TextBox x:Name="OutputConsole" Background="#FF2E2E2E" Foreground="#FFF3F3F3" FontFamily="Fira Code" Padding="5,10,5,6" Text="&gt; Awaiting Connection ..." MaxLength="30" TextWrapping="Wrap" />
+        </ScrollViewer>
+
         <StackPanel Margin="10,10,9.8,10" Background="White" ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.ColumnSpan="2" Grid.Column="1">
             <Label x:Name="ClientNumLabel" Content="Connected Clients: 0"/>
             <Separator Height="4" Margin="0,0,0.2,0"/>

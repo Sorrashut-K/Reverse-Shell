@@ -61,8 +61,8 @@ namespace ReverseShellServer
                 ClientNumLabel.Content = "Connected Clients: " + tcpServer.ClientMap.Count;
                 string clientEndpoint = (sender as TcpClient).Client.RemoteEndPoint.ToString();
                 connectedClients.Add(clientEndpoint);
-                OutputConsole.ContentEnd.InsertLineBreak();
-                OutputConsole.Inlines.Add($"Client connected ({clientEndpoint})");
+                OutputConsole.AppendText("\n");
+                OutputConsole.AppendText($"Client connected ({clientEndpoint})");
 
                 if (activeEndpoint == null)
                 {
@@ -80,8 +80,7 @@ namespace ReverseShellServer
                 ClientNumLabel.Content = "Connected Clients: " + tcpServer.ClientMap.Count;
                 string clientEndpoint = (sender as TcpClient).Client.RemoteEndPoint.ToString();
                 connectedClients.Remove(connectedClients.Where(i => i == clientEndpoint).Single());
-                OutputConsole.ContentEnd.InsertLineBreak();
-                OutputConsole.Inlines.Add($"Client disconnected ({clientEndpoint})");
+                OutputConsole.AppendText($"\nClient disconnected ({clientEndpoint})");
             });
         }
 
@@ -89,8 +88,10 @@ namespace ReverseShellServer
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                OutputConsole.ContentEnd.InsertLineBreak();
-                OutputConsole.Inlines.Add(e.Data);
+            //    string[] lines = OutputConsole.Line Lines;
+                OutputConsole.AppendText("\n");
+                OutputConsole.AppendText(e.Data);
+                (OutputConsole.Parent as ScrollViewer).ScrollToBottom();
             });
         }
 
@@ -103,8 +104,8 @@ namespace ReverseShellServer
             {
                 streamWriter.WriteLine(message);
                 streamWriter.Flush();
-                OutputConsole.ContentEnd.InsertLineBreak();
-                OutputConsole.Inlines.Add($"$ {message}");
+                OutputConsole.AppendText("\n");
+                OutputConsole.AppendText($"$ {message}");
             }
             InputConsole.Clear();
 
@@ -125,8 +126,8 @@ namespace ReverseShellServer
                 streamWriter = new StreamWriter(client.GetStream());
                 Console.WriteLine($"Switched to client {endpoint}");
 
-                OutputConsole.ContentEnd.InsertLineBreak();
-                OutputConsole.Inlines.Add($"\nSwitched to client {endpoint}");
+                OutputConsole.AppendText("\n");
+                OutputConsole.AppendText($"\nSwitched to client {endpoint}");
             }
             
         }
