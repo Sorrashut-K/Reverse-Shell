@@ -17,7 +17,7 @@
         </Grid.ColumnDefinitions>
 
         <ScrollViewer Margin="10,10,10.2,5" >
-            <TextBox x:Name="OutputConsole" Background="#FF2E2E2E" Foreground="#FFF3F3F3" FontFamily="Fira Code" Padding="5,10,5,6" Text="&gt; Awaiting Connection ..." MaxLength="30" TextWrapping="Wrap" />
+            <TextBox x:Name="OutputConsole" Background="#FF2E2E2E" Foreground="#FFF3F3F3" FontFamily="Fira Code" Padding="5,10,5,6" Text="&gt; Awaiting Connection ..." MaxLength="30" TextWrapping="Wrap" IsReadOnly="True" />
         </ScrollViewer>
 
         <StackPanel Margin="10,10,9.8,10" Background="White" ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.ColumnSpan="2" Grid.Column="1">
