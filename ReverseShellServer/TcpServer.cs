@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -130,7 +129,7 @@ namespace ReverseShellServer
             int byteCount = Encoding.ASCII.GetByteCount(data);
             byte[] sendData = Encoding.ASCII.GetBytes(data);
 
-            Console.WriteLine($"Send {byteCount}B of data: {data} to {client.Client.RemoteEndPoint.ToString()}");
+            Console.WriteLine($"Send {byteCount}B of data: {data} to {client.Client.RemoteEndPoint}");
             NetworkStream stream = client.GetStream();
             stream.Write(sendData, 0, sendData.Length);
 
@@ -138,13 +137,13 @@ namespace ReverseShellServer
         }
     }
 
-    public class ClientConnectedArgs : EventArgs    // guideline: derive from EventArgs
+    public class ClientConnectedArgs : EventArgs
     {
         public TcpClient Client { get; set; }
         public Task Task { get; set; }
     }
 
-    class DataRecievedArgs : EventArgs    // guideline: derive from EventArgs
+    class DataRecievedArgs : EventArgs
     {
         public string Data { get; set; }
     }
